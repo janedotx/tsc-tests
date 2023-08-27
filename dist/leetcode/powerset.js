@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.subsets = void 0;
+// this works but we get OOMed
 function deepCopyArrayOfArrays(sets) {
     return sets.map(set => set.slice(0, set.length));
 }

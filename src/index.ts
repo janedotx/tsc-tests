@@ -4,10 +4,10 @@ import { longestConsecutive } from './leetcode/longest_consec_contiguous_subsequ
 
 import { isAnagram } from './leetcode/find_anagram'
 import { subsets } from './leetcode/powerset'
+import { delete_linked_list_node, node1, node2 } from './linked_list/delete_linked_list_node'
+import { traverse_linked_list } from './linked_list/helpers'
 
-const sets  = subsets([1, 2, 3])
-console.log("sets: ", sets)
-
-console.log(subsets([1]))
-
-console.log(subsets([4, 1, 0]))
+const ll_arr = traverse_linked_list(node1)
+console.log(ll_arr)
+// delete_linked_list_node(node2)
+// traverse_linked_list(node1)

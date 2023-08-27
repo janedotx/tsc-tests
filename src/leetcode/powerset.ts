@@ -1,3 +1,4 @@
+// this works but we get OOMed
 function deepCopyArrayOfArrays(sets: number[][]) {
   return sets.map(set => set.slice(0, set.length))
 }

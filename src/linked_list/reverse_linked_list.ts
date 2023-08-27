@@ -1,11 +1,5 @@
-import { Item } from './@types'
-
-function traverse_linked_list(pointer: Item) {
-  console.log(pointer.value)
-  if (pointer.next) {
-    traverse_linked_list(pointer.next)
-  } else return
-}
+import { Item } from '../@types'
+import { traverse_linked_list } from './helpers'
 
 function reverse_linked_list(pointer: Item): Item[] {
   if (pointer.next === null) return [pointer, pointer]
