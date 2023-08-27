@@ -40,10 +40,10 @@ function bubbleDown(input: Array<number>, index: number, limit: number) {
   }
 }
 
-export function heapify(input: Array<number>, end: number) {
-  let index = end
+export function heapify(input: Array<number>) {
+  let index = input.length - 1
   while (index >= 0) {
-    bubbleDown(input, index, end)
+    bubbleDown(input, index, input.length - 1)
     index -= 1
   }
   return input
@@ -57,18 +57,18 @@ export function removeMax(input: Array<number>, index: number) {
   const max = input[0]
   input[0] = input[index]
   bubbleDown(input, 0, index - 1)
-  input[index] = max
   return max
 }
 
 export function heapSort(input: Array<number>) {
   const lastIndex = input.length - 1
-  heapify(input, lastIndex)
+  heapify(input)
   let i = lastIndex
 
-  while (i > 1) {
-    removeMax(input, i)
+  while (i > 0) {
+    const max = removeMax(input, i)
     i -= 1
+    input[i] = max
   }
 }
 

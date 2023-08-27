@@ -36,10 +36,10 @@ function bubbleDown(input, index, limit) {
         }
     }
 }
-function heapify(input, end) {
-    let index = end;
+function heapify(input) {
+    let index = input.length - 1;
     while (index >= 0) {
-        bubbleDown(input, index, end);
+        bubbleDown(input, index, input.length - 1);
         index -= 1;
     }
     return input;
@@ -54,17 +54,17 @@ function removeMax(input, index) {
     const max = input[0];
     input[0] = input[index];
     bubbleDown(input, 0, index - 1);
-    input[index] = max;
     return max;
 }
 exports.removeMax = removeMax;
 function heapSort(input) {
     const lastIndex = input.length - 1;
-    heapify(input, lastIndex);
+    heapify(input);
     let i = lastIndex;
-    while (i > 1) {
-        removeMax(input, i);
+    while (i > 0) {
+        const max = removeMax(input, i);
         i -= 1;
+        input[i] = max;
     }
 }
 exports.heapSort = heapSort;
