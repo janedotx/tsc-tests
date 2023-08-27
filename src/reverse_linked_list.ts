@@ -1,8 +1,4 @@
-
-interface Item {
-  next: Item | null
-  value: string
-}
+import { Item } from './@types'
 
 function traverse_linked_list(pointer: Item) {
   console.log(pointer.value)

@@ -1,0 +1,13 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const heap_1 = require("./heap");
+const a = [1, 2, 3];
+(0, heap_1.swap)(a, 0, 2);
+const heapify_me = [8, 3, 2, 7, 9, 1, 4];
+const heapify_me_copy = [8, 3, 2, 7, 9, 1, 4];
+console.log('before');
+console.log(heapify_me);
+(0, heap_1.theirHeapify)(heapify_me);
+console.log(heapify_me);
+(0, heap_1.heapify)(heapify_me_copy);
+console.log(heapify_me_copy);

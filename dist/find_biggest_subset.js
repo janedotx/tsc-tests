@@ -1,6 +1,9 @@
 const testArr1 = [0, -1, 5, -1];
 const testArr2 = [0, 1, 5, -1];
+const testArr3 = [0, 1, 5, -1, 10];
 function findBiggestSubset(input) {
+    if (input.length === 0)
+        return [];
     const solutions = input.map(x => []);
     let i = 0;
     let j = 0;
@@ -31,8 +34,12 @@ function findBiggestSubset(input) {
     console.log('max_i: ', max_i);
     console.log('max_j: ', max_j);
     console.log('biggest: ', biggest);
-    console.dir(solutions);
+    // console.dir(solutions)
 }
 findBiggestSubset(testArr1);
+console.log();
 findBiggestSubset(testArr2);
+console.log();
 findBiggestSubset([2]);
+console.log();
+findBiggestSubset(testArr3);

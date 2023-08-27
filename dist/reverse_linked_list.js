@@ -1,3 +1,5 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 function traverse_linked_list(pointer) {
     console.log(pointer.value);
     if (pointer.next) {
