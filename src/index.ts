@@ -1,4 +1,5 @@
-import { swap, heapify, theirHeapify, heapSort } from './heap'
+import { swap, heapify,  heapSort,  removeMax } from './heap'
+import {  theirHeapify, theirHeapsort,  theirRemoveMax } from './theirHeap'
 
 const a = [1,2,3]
 swap(a, 0, 2)
@@ -6,14 +7,22 @@ swap(a, 0, 2)
 const heapify_me = [8, 3, 2, 7, 9 , 1, 4]
 const heapify_me_copy = [8, 3, 2, 7, 9 , 1, 4]
 
-// console.log('before')
-// console.log(heapify_me)
-// theirHeapify(heapify_me)
+const bb = [2, 1]
+const r = theirRemoveMax(bb, 2)
+console.log(bb)
+console.log(r)
 
-// console.log(heapify_me)
+const cc = [2]
+theirRemoveMax(cc, 1)
+console.log('cc: ', cc)
 
-// heapify(heapify_me_copy, heapify_me_copy.length - 1)
+heapSort(cc)
+console.log('my cc: ', cc)
 
-heapSort(heapify_me_copy)
-console.log(heapify_me_copy)
+const dd = []
+heapSort(dd)
+console.log('my dd: ', dd)
 
+const ee = [2,1]
+heapSort(ee)
+console.log('my ee: ', ee)

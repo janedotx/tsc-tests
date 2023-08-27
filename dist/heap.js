@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.theirHeapify = exports.heapify = exports.swap = void 0;
+exports.heapSort = exports.removeMax = exports.heapify = exports.swap = void 0;
 function getLeftChildIndex(n) { return 2 * n + 1; }
 function getRightChildIndex(n) { return 2 * n + 2; }
 function getParent(n) {
@@ -12,15 +12,15 @@ function swap(input, i, j) {
     input[i] = val;
 }
 exports.swap = swap;
-function bubbleDown(input, index) {
-    console.log('bubbleDown');
-    while (index < input.length) {
-        console.log('index: ', index);
-        console.log(input[index]);
+function bubbleDown(input, index, limit) {
+    // console.log('bubbleDown')
+    while (index < limit) {
+        // console.log('index: ', index)
+        // console.log(input[index])
         const leftChildIndex = getLeftChildIndex(index);
         const rightChildIndex = getRightChildIndex(index);
         // stop if there are no children
-        if (leftChildIndex >= input.length && rightChildIndex >= input.length)
+        if (leftChildIndex >= limit && rightChildIndex >= limit)
             return;
         const leftChild = input[leftChildIndex];
         const rightChild = input[rightChildIndex];
@@ -36,47 +36,35 @@ function bubbleDown(input, index) {
         }
     }
 }
-function heapify(input) {
-    let index = input.length - 1;
+function heapify(input, end) {
+    let index = end;
     while (index >= 0) {
-        bubbleDown(input, index);
+        bubbleDown(input, index, end);
         index -= 1;
     }
     return input;
 }
 exports.heapify = heapify;
-function theirBubbleDown(heap, index) {
-    while (index < heap.length) {
-        const leftIndex = getLeftChildIndex(index);
-        const rightIndex = getRightChildIndex(index);
-        // if we don't have any child nodes, we can stop
-        if (leftIndex >= heap.length) {
-            break;
-        }
-        // find the larger of the two children
-        let largerChildIndex = leftIndex;
-        if (rightIndex < heap.length && heap[leftIndex] < heap[rightIndex]) {
-            largerChildIndex = rightIndex;
-        }
-        // are we larger than our children?
-        // if so, swap with the larger child.
-        if (heap[index] < heap[largerChildIndex]) {
-            const tmp = heap[largerChildIndex];
-            heap[largerChildIndex] = heap[index];
-            heap[index] = tmp;
-            // continue bubbling down
-            index = largerChildIndex;
-        }
-        else {
-            // we're larger than both children, so we're done
-            break;
-        }
+function removeMax(input, index) {
+    // console.log('index: ', index)
+    // console.log('input[0]: ', input[0])
+    // console.log('input[index]: ', input[index])
+    console.log('removeMax');
+    console.log('input');
+    const max = input[0];
+    input[0] = input[index];
+    bubbleDown(input, 0, index - 1);
+    input[index] = max;
+    return max;
+}
+exports.removeMax = removeMax;
+function heapSort(input) {
+    const lastIndex = input.length - 1;
+    heapify(input, lastIndex);
+    let i = lastIndex;
+    while (i > 1) {
+        removeMax(input, i);
+        i -= 1;
     }
 }
-function theirHeapify(theArray) {
-    // bubble down from the leaf nodes up to the top
-    for (let index = theArray.length - 1; index >= 0; index--) {
-        theirBubbleDown(theArray, index);
-    }
-}
-exports.theirHeapify = theirHeapify;
+exports.heapSort = heapSort;
