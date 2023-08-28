@@ -1,6 +1,6 @@
 export interface Item {
   next: Item | null
-  value: string
+  value: string | null
 }
 
 export type DLLItem  = Item & { prev: Item | null }

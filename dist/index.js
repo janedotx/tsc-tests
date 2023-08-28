@@ -1,7 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const delete_linked_list_node_1 = require("./linked_list/delete_linked_list_node");
-const helpers_1 = require("./linked_list/helpers");
-(0, helpers_1.traverse_linked_list)(delete_linked_list_node_1.node1);
-(0, delete_linked_list_node_1.delete_linked_list_node)(delete_linked_list_node_1.node2);
-(0, helpers_1.traverse_linked_list)(delete_linked_list_node_1.node1);
+const convert_to_binary_1 = require("./leetcode/convert_to_binary");
+(0, convert_to_binary_1.convert_to_binary)(10, false);
+(0, convert_to_binary_1.convert_to_binary)(5, false);
+(0, convert_to_binary_1.convert_to_binary)(1, false);
+(0, convert_to_binary_1.convert_to_binary)(2, false);
+(0, convert_to_binary_1.convert_to_binary)(8, true);
+(0, convert_to_binary_1.convert_to_binary)(20, false);
