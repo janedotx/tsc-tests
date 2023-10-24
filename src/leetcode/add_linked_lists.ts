@@ -88,16 +88,13 @@ function addTwoNumbers(l1: ListNode | null, l2: ListNode | null): ListNode | nul
   const nodes: ListNode[] = []
   let p1 = l1
   let p2 = l2
-  if (p1 === null) return null
-  if (p2 === null) return null
+  let cur = l1
   while (true) {
     console.log(`p1: ${p1.val} ${p1.next === null}, p2: ${p2.val}, ${p2.next === null}`)
     const val = p1.val + p2.val
     nodes.push(new ListNode(val, null))
     p1 = p1.next
     p2 = p2.next
-    console.log('after following pointer')
-    console.log(`p1: ${p1 ? p1.val : null}  ${p1 ? p1.next : null}, p2: ${p2 ? p2.val : null}, ${p2 ? p2.next : null}`)
     if (p1 === null) break;
     if (p2 === null) break;
   }
@@ -159,6 +156,81 @@ function addTwoNumbersWithString(l1: ListNode | null, l2: ListNode | null) {
   return node
 }
 
+
+/*
+
+Memory
+Details
+48.07MB
+Beats 68.73%of users with TypeScript
+
+Runtime
+Details
+91ms
+Beats 79.18%of users with TypeScript
+*/
+function addTwoNumbersMemoryEfficient(l1: ListNode | null, l2: ListNode | null) {
+  let p1 = l1
+  let p2 = l2
+  let cur = l1
+  let first = p1
+  let carry = false
+
+  while (true) {
+    let val = p1.val + p2.val
+    if (carry) {
+      val += 1
+      carry = false
+    }
+    p1 = p1.next
+    p2 = p2.next
+    cur.val = val
+    if (val >= 10) {
+      cur.val = val - 10
+      carry = true
+    }
+    if (p2 === null) {
+      break;
+    }
+    if (p1 === null) { 
+      cur.next = p2
+      break;
+    } else {
+
+      cur = p1
+    }
+    
+  }
+
+  if (cur.next) {
+    cur = cur.next
+    while (true) {
+      if (carry) {
+        cur.val += 1
+        carry = false
+      }
+      if (cur.val >= 10) {
+        cur.val = cur.val - 10
+        carry = true
+      }
+      if (cur.next) {
+        cur = cur.next
+      } else {
+        if (carry) {
+          cur.next = new ListNode(1, null)
+        }
+        break;
+      }
+
+    }
+  } else {
+    if (carry) {
+      cur.next = new ListNode(1, null)
+    }
+  }
+  return first
+}
+
 // 2, 4, 3
 // 5, 6, 4
 const node1_0 = new ListNode(2, new ListNode(4, new ListNode(3, null)))
@@ -170,6 +242,8 @@ const node4_0 = new ListNode(9,
     new ListNode(9, 
       new ListNode(9, new ListNode(9, new ListNode(9, new ListNode(9, null)))))))
 
+const node5_0 = new ListNode(5, null)
+const node6_0 = new ListNode(5, null)
 
 // addTwoNumbers(node1_0, node2_0)
 const firstLongNode = new ListNode(1, null)
@@ -181,5 +255,9 @@ const long_nodes = [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
   } 
 })
 
-const res = addTwoNumbers(node3_0, node4_0)
+const res = addTwoNumbersMemoryEfficient(node3_0, node4_0)
 console.log(traverse_linked_list(res))
+const res2 = addTwoNumbersMemoryEfficient(node1_0, node2_0)
+console.log(traverse_linked_list(res2))
+const res3 = addTwoNumbersMemoryEfficient(node5_0, node6_0)
+console.log(traverse_linked_list(res3))
