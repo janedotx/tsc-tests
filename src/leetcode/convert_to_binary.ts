@@ -56,3 +56,11 @@ export function convert_to_binary(num: number, debug: boolean) {
   console.log('converted from ', `${original}, ${result}`)
   return result
 }
+
+
+convert_to_binary(10, false)
+convert_to_binary(5, false)
+convert_to_binary(1, false)
+convert_to_binary(2, false)
+convert_to_binary(8, true)
+convert_to_binary(20, false)
