@@ -2,6 +2,7 @@ const testArr1 = [0, -1, 5, -1]
 const testArr2 = [0, 1, 5, -1]
 const testArr3 = [0, 1, 5, -1, 10]
 
+/* suboptimal run time of O(n^2) and memory of O(n^2) */
 function findBiggestSubset(input: number[]) {
   if (input.length === 0) return []
   const solutions: number[][] = input.map(x => [])

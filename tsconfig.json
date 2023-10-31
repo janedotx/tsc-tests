@@ -10,5 +10,5 @@
 
   "outDir": "dist/"
   },
-  "include": ["./src/*/*.ts", "src/linked_list/reverse_linked_list.ts" ],
+  "include": ["./src/**/*.ts", "src/linked_list/reverse_linked_list.ts" ],
 }

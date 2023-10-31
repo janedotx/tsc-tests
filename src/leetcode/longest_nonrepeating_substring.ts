@@ -86,7 +86,7 @@ Details
 Beats 40.29%of users with TypeScript
 
 */
-function lengthOfLongestSubstring(s: string): number {
+function lengthOfLongestSubstringFaster(s: string): number {
   if (s === '') return 0
   let cur_i = 0
   let cur_j = 0
@@ -121,13 +121,74 @@ function lengthOfLongestSubstring(s: string): number {
   }
 
  return max_j - max_i + 1
-};// lengthOfLongestSubstring('aaa')
-// lengthOfLongestSubstring('')
-// lengthOfLongestSubstring('a331. sss')
-// lengthOfLongestSubstring('abcabcbb')
+}
+
+/*
+Runtime
+Details
+76ms
+Beats 64.93%of users with TypeScript
+
+Memory
+Details
+45.71MB
+Beats 83.63%of users with TypeScript
+
+you have to remove all the console.log statements to get the fastest runtime though
+*/
+
+function lengthOfLongestSubstring(s: string): number {
+  if (s === '') return 0
+  let cur_i = 0
+  let cur_j = 0
+
+  let max_i = 0
+  let max_j = 0
+  const set = new Set()
+  set.add(s[0])
+
+  for (let i = 1; i < s.length; i++) {
+      const curLetter = s[i]
+      if (!set.has(curLetter)) {
+        // add to string
+        cur_j += 1
+        set.add(curLetter)
+      } else {
+        let index
+        for (let z = cur_i; z <= cur_j; z++) {
+          if (s[z] === curLetter) {
+            index = z
+            break;
+          }
+          set.delete(s[z])
+        }
+        cur_i = index + 1
+        cur_j += 1
+
+      }
+
+    if (cur_j - cur_i   > max_j - max_i) {
+      max_j = cur_j
+      max_i = cur_i
+    }
+  }
+
+  console.log()
+  console.log(s)
+  console.log(`cur substr: ${cur_i} to ${cur_j}`)
+  console.log(`max substr: ${max_i} to ${max_j}`)
+  console.log(max_j - max_i + 1)
+
+ return max_j - max_i + 1
+}
+
+lengthOfLongestSubstring('aaa')
+lengthOfLongestSubstring('')
+lengthOfLongestSubstring('a331. sss')
+lengthOfLongestSubstring('abcabcbb')
 lengthOfLongestSubstring('aud')
 lengthOfLongestSubstring('dvdf')
-// lengthOfLongestSubstring('bbtablud')
-// lengthOfLongestSubstring('wobgrovw')
-// lengthOfLongestSubstring('abcabcbb')
-// lengthOfLongestSubstring('vqblqcb')
+lengthOfLongestSubstring('bbtablud')
+lengthOfLongestSubstring('wobgrovw')
+lengthOfLongestSubstring('vqblqcb')
+lengthOfLongestSubstring('abaacdefg')
