@@ -44,3 +44,25 @@ function subsets(nums) {
     return cleanSets;
 }
 exports.subsets = subsets;
+//////
+// works without getting OOM-killed on leetcode
+function computePowerSubsets(input) {
+    if (input.length === 0 || input.length === 1) {
+        return [input];
+    }
+    let subsets = [[input[0]]];
+    for (let i = 1; i < input.length; i++) {
+        const keep = deepCopyArrayOfArrays(subsets);
+        keep.forEach(k => k.push(input[i]));
+        subsets = [...subsets, ...keep];
+    }
+    return subsets;
+}
+function powerset(input) {
+    let all = [];
+    for (let i = 0; i < input.length; i++) {
+        all.push(computePowerSubsets(input.slice(i, input.length)));
+    }
+    all.push([[]]);
+    return all.flat();
+}
