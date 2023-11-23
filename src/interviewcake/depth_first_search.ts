@@ -1,9 +1,6 @@
 // https://www.interviewcake.com/question/python/balanced-binary-tree?course=fc1&section=trees-graphs
-interface BTNode {
-  value: string | null
-  left: BTNode | null
-  right: BTNode | null
-}
+
+import { nodeA1, nodeZ1 } from "./fixtures"
 
 function depthFirstSearch(node: BTNode, depth: number) {
   depth += 1
@@ -26,17 +23,6 @@ function depthFirstSearch(node: BTNode, depth: number) {
 }
 
 
-const nodeF1: BTNode = { left: null, right: null, value: 'F' }
-const nodeG1: BTNode = { left: null, right: null, value: 'G' }
-const nodeD1: BTNode = { left: nodeF1, right: nodeG1, value: 'D' }
-const nodeE1: BTNode = { left: null, right: null, value: 'E' }
-const nodeB1: BTNode = { left: nodeD1, right: nodeE1, value: 'B' }
-const nodeC1: BTNode = { left: null, right: null, value: 'C' }
-const nodeA1: BTNode = { left: nodeB1, right: nodeC1, value: 'A' }
-
 console.log(depthFirstSearch(nodeA1, 0))
 
-const nodeX1: BTNode = { left: null, right: null, value: 'B' }
-const nodeY1: BTNode = { left: null, right: null, value: 'C' }
-const nodeZ1: BTNode = { left: nodeY1, right: nodeX1, value: 'A' }
 console.log(depthFirstSearch(nodeZ1, 0))

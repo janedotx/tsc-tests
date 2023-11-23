@@ -1,11 +1,5 @@
 // https://www.interviewcake.com/question/python/balanced-binary-tree?course=fc1&section=trees-graphs
 
-interface BTNode {
-  value: string | null
-  left: BTNode | null
-  right: BTNode | null
-}
-
 function isSuperbalanced(parent: BTNode): any { 
   let maxDepth = 1
   let minDepth = 1
