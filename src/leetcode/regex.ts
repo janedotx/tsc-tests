@@ -134,7 +134,7 @@ function isMatchMachine(input: string, machineNode: State): number {
       }
     } else {
       // ran out of regex, must be false
-      currentPath = false
+      console.log('ran out of regex')
       break;
     }
   }
@@ -150,9 +150,8 @@ function isMatchMachine(input: string, machineNode: State): number {
   // }
 
   if (curState.nextStates.length > 0) {
-    curState = getNextNodeNotSelf(curState)
+    counter = -100
   }
-  if (curState.val !== null) counter = -100
   
 
   // if (curState.val && !isLoop(curState)) {
@@ -173,7 +172,7 @@ function isMatchMachine(input: string, machineNode: State): number {
   return counter
 }
 
-function isMatch(input: string, regex: string): boolean {
+export function isMatch(input: string, regex: string): boolean {
   const machine: State[] = generateStateMachine(regex)
   /*
   console.log('printing machine')
@@ -187,77 +186,15 @@ function isMatch(input: string, regex: string): boolean {
   return res === input.length
 };
 
-///*
-console.log('input: aa, regex: /aa/')
-console.log(isMatch('aa', 'aa') === true)
-console.log()
-
-console.log('input: a, regex: /a/')
-console.log(isMatch('a', 'a') === true)
-console.log()
-//*/
-
-console.log('input: a, regex: /.*/')
-console.log(isMatch('a', '.*') === true)
-console.log()
-
-console.log('input: b, regex: /a/')
-console.log(isMatch('b', 'a') === false)
-console.log()
-
-console.log('input: ba, regex: /b*/')
-console.log(isMatch('ba', 'b*') === false)
-console.log()
-
-console.log('input: ba, regex: /a/')
-console.log(isMatch('ba', 'a') === false)
-console.log()
-console.log('input: ba, regex: /z/')
-console.log(isMatch('ba', 'z') === false)
-console.log()
-
-console.log('input: ba, regex: /.*/')
-console.log(isMatch('ba', '.*') === true)
-console.log()
-
-// console.log(generateStateMachine('b*aa'))
-
-///*
-console.log('input: baa, regex: /b*aa/')
-console.log(isMatch('baa', 'b*aa') === true)
-console.log()
-
-// don't have to be concerned with this case
-// console.log('input: \'\', regex: /b*aa/')
-// console.log(isMatch('', 'b*aa') === false)
-// console.log()
-//*/
-
-console.log('input: baad, regex: /ba*d*/')
-console.log(isMatch('baad', 'ba*d*') === true)
-console.log()
-
-console.log('input: baad, regex: /z*/')
-console.log(isMatch('baad', 'z*') === false)
-console.log()
-
-console.log('input: aa, regex: a')
-console.log(isMatch('aa', 'a') === false)
-console.log()
-
-console.log('input: aa, regex: c*aa')
-console.log(isMatch('aa', 'c*aa') === true)
-console.log()
-
-console.log('input: aa, regex: d*c*aa')
-console.log(isMatch('aa', 'd*c*aa') === true)
-console.log()
-
-console.log('input: mississippi, regex: mis*i*s*ip*i')
-console.log(isMatch('mississippi', 'mis*i*s*ip*i') === true)
-console.log()
-
-
 
 console.log('input: ab, regex: ".*c"')
 console.log(isMatch('ab', '.*c') === false)
+console.log()
+
+console.log('input: a, regex: "aa"')
+console.log(isMatch('a', 'aa') === false)
+console.log()
+
+console.log('input: a, regex: "aaa"')
+console.log(isMatch('a', 'aaa') === false)
+console.log()
