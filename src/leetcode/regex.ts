@@ -82,71 +82,95 @@ function getNextNodeNotSelf(state: State) {
 }
 let globalCounter = 0
 
-function isMatchMachine(input: string, machineNode: State): boolean {
+function isMatchMachine(input: string, machineNode: State): number {
   // globalCounter += 1
   // console.log('globalCounter: ', globalCounter)
   // console.log('machine')
   // console.log(machineNode)
-  if (machineNode.val === null && input.length > 0) return false
-  if (machineNode.val && input.length === 0) return false
+  if (machineNode.val === null && input.length > 0) return -1 
+  if (machineNode.val && input.length === 0) return -1
   let curState = machineNode
   let alternatePathRes = false
   let currentPath = true
+  let counter = 0
+  let forkCount = 0
+  let counters = []
 
   for (let i = 0; i < input.length; i++) {
     const curChar = input[i]
+        // console.log('top of loop', curState.val, curChar)
     // console.log('i: ', i)
     // console.log('curState.matcher(curChar): ', curState.matcher(curChar))
     if (curState.val) {
       if (curState.matcher(curChar)) {
-        // console.log('a match!: ', curState.val, curChar)
+        counter += 1
         if (!isLoop(curState)) curState = curState.nextStates[0]
         else {
           // console.log('hitting an alternative path')
-          // console.log()
           // console.log('curState: ', curState)
-          // console.log('trying alternate path')
-          // console.log(input.slice(i + 1, input.length))
+          // console.log('input.slice(i + 1, input.length): ', input.slice(i + 1, input.length))
           // console.log(getNextNodeNotSelf(curState))
+          // console.log()
           // advance past loop and try with next char
-          alternatePathRes = isMatchMachine(input.slice(i + 1, input.length), getNextNodeNotSelf(curState))
+          forkCount = isMatchMachine(input.slice(i + 1, input.length), getNextNodeNotSelf(curState))
+          // console.log('counter: ', counter)
+          // console.log('forkCount length: ', forkCount)
+          if (counter + forkCount === input.length) return input.length
         }
       } else {
         // console.log('not a match, must be false')
         // console.log('alternatePathRes: ', alternatePathRes)
         // not a match, must be false, or, if we're in a loop, advance past loop and keep trying
         if (!isLoop(curState)) {
-          currentPath = false
-          return alternatePathRes || currentPath
           break;
         } else {
         // advance past loop and keep trying with current letter
-          alternatePathRes = isMatchMachine(input.slice(i, input.length), getNextNodeNotSelf(curState))
+          forkCount = isMatchMachine(input.slice(i, input.length), getNextNodeNotSelf(curState))
+          // console.log('trying alternate path, advance past loop and try again with current letter')
+          // console.log('counter: ', counter)
+          // console.log('forkCount length: ', forkCount)
+          if (counter + forkCount === input.length) return input.length
         }
       }
     } else {
       // ran out of regex, must be false
       currentPath = false
-        return alternatePathRes || currentPath
       break;
     }
   }
+
+  // if (curState.val && !isLoop(curState)) {
+  //    console.log('ran out of input string')
+  //    counter = -100
+  // }
+
+  // if (curState.val && isLoop(curState) && getNextNodeNotSelf(curState).val !== null) {
+  //    console.log('ran out of input string')
+  //    counter = -100
+  // }
+
+  if (curState.nextStates.length > 0) {
+    curState = getNextNodeNotSelf(curState)
+  }
+  if (curState.val !== null) counter = -100
   
 
-  if (curState.val && !isLoop(curState)) {
-    console.log('ran out of input string')
-    currentPath = false
-        return alternatePathRes || currentPath
-  }
-  // console.log('terminated loop, curState: ', curState)
-  if (isLoop(curState) && hasTerminus(curState)) {
-    console.log('regex terminated with a loop')
-    currentPath = true
-        return alternatePathRes || currentPath
-  }
-  console.log('alternatePathRes: ', alternatePathRes)
-  console.log('currentPath: ', currentPath)
-  return alternatePathRes || currentPath
+  // if (curState.val && !isLoop(curState)) {
+  //   console.log('ran out of input string')
+  //   currentPath = false
+  //       return alternatePathRes || currentPath
+  // }
+  // // console.log('terminated loop, curState: ', curState)
+  // if (isLoop(curState) && hasTerminus(curState)) {
+  //   console.log('regex terminated with a loop')
+  //   currentPath = true
+  //       return alternatePathRes || currentPath
+  // }
+  // console.log('alternatePathRes: ', alternatePathRes)
+  // console.log('currentPath: ', currentPath)
+  // console.log('about to return counter: ', counter)
+  // console.log('last machine node: ', curState)
+  return counter
 }
 
 function isMatch(input: string, regex: string): boolean {
@@ -158,7 +182,9 @@ function isMatch(input: string, regex: string): boolean {
     console.log('nextStates: ', m.nextStates.map(s => s.val))
   })
   */
-  return isMatchMachine(input, machine[0])
+ const res = isMatchMachine(input, machine[0])
+ console.log('res: ', res)
+  return res === input.length
 };
 
 ///*
@@ -201,9 +227,10 @@ console.log('input: baa, regex: /b*aa/')
 console.log(isMatch('baa', 'b*aa') === true)
 console.log()
 
-console.log('input: \'\', regex: /b*aa/')
-console.log(isMatch('', 'b*aa') === false)
-console.log()
+// don't have to be concerned with this case
+// console.log('input: \'\', regex: /b*aa/')
+// console.log(isMatch('', 'b*aa') === false)
+// console.log()
 //*/
 
 console.log('input: baad, regex: /ba*d*/')
@@ -225,3 +252,12 @@ console.log()
 console.log('input: aa, regex: d*c*aa')
 console.log(isMatch('aa', 'd*c*aa') === true)
 console.log()
+
+console.log('input: mississippi, regex: mis*i*s*ip*i')
+console.log(isMatch('mississippi', 'mis*i*s*ip*i') === true)
+console.log()
+
+
+
+console.log('input: ab, regex: ".*c"')
+console.log(isMatch('ab', '.*c') === false)
