@@ -7,8 +7,11 @@ Given an input string s and a pattern p, implement regular expression matching w
 
 The matching should cover the entire input string (not partial).
 */
+const DEBUG = false
 
-import { machine } from "os"
+function logit(msg: string) {
+  if (DEBUG) console.log(msg)
+}
 
 interface State {
   val: string | null
@@ -77,6 +80,20 @@ function hasTerminus(state: State) {
   return state.nextStates.find(s => s.val === null)
 }
 
+function printMachine(m: State) {
+    let cur = m
+    while (true) {
+      if (cur.val === null) break;
+  
+      console.log(cur.val)
+      if (cur.nextStates.length > 1) {
+        cur = cur.nextStates[1]
+      } else {
+        cur = cur.nextStates[0]
+      }
+    }
+  }
+
 function getNextNodeNotSelf(state: State) {
   return state.nextStates.find(s => state !== s)
 }
@@ -104,14 +121,18 @@ function isMatchMachine(input: string, machineNode: State): number {
     if (curState.val) {
       if (curState.matcher(curChar)) {
         counter += 1
+        // calmly advance to next regex node
         if (!isLoop(curState)) curState = curState.nextStates[0]
         else {
-          // console.log('hitting an alternative path')
+          // console.log('advance past the loop')
           // console.log('curState: ', curState)
           // console.log('input.slice(i + 1, input.length): ', input.slice(i + 1, input.length))
           // console.log(getNextNodeNotSelf(curState))
+          // console.log('end output for advancing past the loop')
           // console.log()
           // advance past loop and try with next char
+          // if this path doesn't work out, we don't advance the regex and we stay in the loop and move
+          // on to the next char
           forkCount = isMatchMachine(input.slice(i + 1, input.length), getNextNodeNotSelf(curState))
           // console.log('counter: ', counter)
           // console.log('forkCount length: ', forkCount)
@@ -125,8 +146,8 @@ function isMatchMachine(input: string, machineNode: State): number {
           break;
         } else {
         // advance past loop and keep trying with current letter
-          forkCount = isMatchMachine(input.slice(i, input.length), getNextNodeNotSelf(curState))
           // console.log('trying alternate path, advance past loop and try again with current letter')
+          forkCount = isMatchMachine(input.slice(i, input.length), getNextNodeNotSelf(curState))
           // console.log('counter: ', counter)
           // console.log('forkCount length: ', forkCount)
           if (counter + forkCount === input.length) return input.length
@@ -134,7 +155,7 @@ function isMatchMachine(input: string, machineNode: State): number {
       }
     } else {
       // ran out of regex, must be false
-      console.log('ran out of regex')
+      // console.log('ran out of regex')
       break;
     }
   }
@@ -148,10 +169,24 @@ function isMatchMachine(input: string, machineNode: State): number {
   //    console.log('ran out of input string')
   //    counter = -100
   // }
+  
+  // console.log('printing machine')
+  // console.log(curState)
+  // printMachine(curState)
 
+  // if (curState.nextStates.length > 0) {
+  //   counter = -100
+  // }
   if (curState.nextStates.length > 0) {
-    counter = -100
-  }
+        while (true) {
+          if (curState.val === null) break;
+          if (curState.val !== null && (!isLoop(curState))) {
+            counter = -100
+            break;
+          }
+          curState = getNextNodeNotSelf(curState)
+        }
+       }
   
 
   // if (curState.val && !isLoop(curState)) {
@@ -197,4 +232,16 @@ console.log()
 
 console.log('input: a, regex: "aaa"')
 console.log(isMatch('a', 'aaa') === false)
+console.log()
+
+console.log('input: a, regex: "ab*"')
+console.log(isMatch('a', 'ab*') === true)
+console.log()
+
+console.log('input: aaa, regex: "a*"')
+console.log(isMatch('aaa', 'a*') === true)
+console.log()
+
+console.log('input: aaa, regex: "a*b*a"')
+console.log(isMatch('aaa', 'a*b*a') === true)
 console.log()
