@@ -16,10 +16,11 @@ function logit(msg: string) {
 interface State {
   val: string | null
   nextStates: State[]
+  index: number
   matcher: (x: string) => boolean | null
 }
 
-function generateStateMachine(regex: string) {
+export function generateStateMachine(regex: string) {
   const machine = []
   let prev = null
   for (let i = 0; i < regex.length; i++) {
@@ -56,7 +57,46 @@ function generateStateMachine(regex: string) {
   machine.push({ val: null, nextStates: [], matcher: (x: string) => true })
 
   if (machine[machine.length - 2]) machine[machine.length - 2].nextStates.push(machine[machine.length  - 1])
+  let curLoop = null
+  for (let i = 0; i < machine.length; i++) {
+    machine[i].index = i
+  }
 
+  for (let i = 1; i < machine.length; i++) {
+    console.log('i: ', i)
+    console.log('curloop: ', curLoop)
+    console.log('machine[i]: ', machine[i])
+    const cur = machine[i]
+
+    if (curLoop) {
+      if (isLoop(cur) && (curLoop.val === cur.val || curLoop.val === '.')) {
+        if (curLoop.val == cur.val) {
+          console.log('consolidating identical nodees')
+          curLoop.nextStates = machine[i].nextStates
+        } else if (curLoop.val === '.') {
+          curLoop.nextStates = [curLoop]
+          curLoop.nextStates.push(getNextNodeNotSelf(machine[i]))
+        }
+      } else {
+        console.log('ran into something that cannot consolidate')
+        curLoop = null
+      }
+    }
+    else  {
+      if (isLoop(machine[i-1]) && isLoop(cur) && (machine[i-1].val === cur.val || machine[i-1].val === '.')) {
+        console.log('starting a new loop')
+        curLoop = machine[i-1]
+        if (curLoop.val == cur.val) {
+          curLoop.nextStates = cur.nextStates
+        } else if (curLoop.val === '.') {
+          curLoop.nextStates = [curLoop]
+          curLoop.nextStates.push(getNextNodeNotSelf(cur))
+        }
+      }
+    
+    }
+
+  } 
   return machine
 }
 
@@ -73,6 +113,7 @@ let states2 = generateStateMachine('ab')
 console.log('loop?: ', isLoop(states2[1]))
 */
 function isLoop(state: State) {
+  if (!state) return false
   return state.nextStates.includes(state)
 }
 
@@ -85,7 +126,13 @@ function printMachine(m: State) {
     while (true) {
       if (cur.val === null) break;
   
-      console.log(cur.val)
+      if (isLoop(cur)) console.log(cur.val + '*')
+      else console.log(cur.val)
+    console.log(cur.index)
+
+    console.log('states')
+    cur.nextStates.forEach(s => console.log(s))
+    console.log()
       if (cur.nextStates.length > 1) {
         cur = cur.nextStates[1]
       } else {
@@ -222,26 +269,43 @@ export function isMatch(input: string, regex: string): boolean {
 };
 
 
-console.log('input: ab, regex: ".*c"')
-console.log(isMatch('ab', '.*c') === false)
-console.log()
+// console.log('input: ab, regex: ".*c"')
+// console.log(isMatch('ab', '.*c') === false)
+// console.log()
 
-console.log('input: a, regex: "aa"')
-console.log(isMatch('a', 'aa') === false)
-console.log()
+// console.log('input: a, regex: "aa"')
+// console.log(isMatch('a', 'aa') === false)
+// console.log()
 
-console.log('input: a, regex: "aaa"')
-console.log(isMatch('a', 'aaa') === false)
-console.log()
+// console.log('input: a, regex: "aaa"')
+// console.log(isMatch('a', 'aaa') === false)
+// console.log()
 
-console.log('input: a, regex: "ab*"')
-console.log(isMatch('a', 'ab*') === true)
-console.log()
+// console.log('input: a, regex: "ab*"')
+// console.log(isMatch('a', 'ab*') === true)
+// console.log()
 
-console.log('input: aaa, regex: "a*"')
-console.log(isMatch('aaa', 'a*') === true)
-console.log()
+// console.log('input: aaa, regex: "a*"')
+// console.log(isMatch('aaa', 'a*') === true)
+// console.log()
 
-console.log('input: aaa, regex: "a*b*a"')
-console.log(isMatch('aaa', 'a*b*a') === true)
-console.log()
+// console.log('input: aaa, regex: "a*b*a"')
+// console.log(isMatch('aaa', 'a*b*a') === true)
+// console.log()
+
+
+// console.log('input: aaa, regex: "a*b*a"')
+// console.log(isMatch('aaa', 'a*b*a') === true)
+// console.log()
+
+
+// const dotstar = generateStateMachine('.*a*b*')
+// // console.log(dotstar)
+// // console.log(isLoop(dotstar[0]))
+// printMachine(dotstar[0])
+//  console.log()
+// printMachine(generateStateMachine('a*.*b*')[0])
+//  console.log()
+// printMachine(generateStateMachine('.*a*ab*')[0])
+//  console.log()
+printMachine(generateStateMachine('a*a*a*b*')[0])
